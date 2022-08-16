@@ -7,7 +7,7 @@ export const usePermissonStore = defineStore(Names.PERMISSION, {
   state: () => {
     return {
       asyncRoutes: [],
-      count:0
+      whileList : ['/login', '/404']
     }
   },
   //computed 修饰一些值
@@ -26,6 +26,7 @@ export const usePermissonStore = defineStore(Names.PERMISSION, {
       routes.forEach(item => {
         router.options.routes.push(item)
         if (item.meta.isMenuName == '1') {
+          this.whileList.push(item.path)
           router.addRoute({
             path: item.path,
             name: item.name,
@@ -35,6 +36,7 @@ export const usePermissonStore = defineStore(Names.PERMISSION, {
             children: [],
           })
           item.children.forEach(i => {
+            this.whileList.push(item.path)
             router.addRoute(item.name, {
               path: i.path,
               name: i.name,
@@ -46,6 +48,7 @@ export const usePermissonStore = defineStore(Names.PERMISSION, {
             })
           })
         } else {
+          this.whileList.push(item.path)
           router.addRoute(item.name, {
             path: item.path,
             name: item.name,

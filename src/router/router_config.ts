@@ -2,25 +2,37 @@ import router from './index'
 import Layout from '../layout/index.vue'
 import NProgress from 'nprogress'
 import 'nprogress/nprogress.css'
-import {useTestStore} from '../store/index'
+import pinia from '../store/store'
+import { usePermissonStore } from '../store/permission'
 
-// const store = useTestStore()
-// const {asyncRoutes} = store
+const store = usePermissonStore(pinia)
+const {asyncRoutes} = store
 
 const modules = import.meta.glob("../views/**/**.vue")
-const whileList = ['/login', '/404']
+let whileList = ['/login', '/404']
 let routeArr = []
 //页面刷新路由失效（未解决）
 //跳转404（未解决）
 router.beforeEach((to, from, next) => {
+  console.log(whileList);
+
   NProgress.start()
   routeArr = []
   to404(router.options.routes)
+  if (from.path == '/login') {
+    whileList = ['/login', '/404', '/']
+    let asyncRoutes = JSON.parse(sessionStorage.getItem('route'))
+    if (asyncRoutes) {
+      onFilterRoutes(asyncRoutes)
+    }
+  }
   if (!routeArr.includes(to.path)) {
+    console.log('找不到咯');
+
     next('/404')
   } else {
     if (whileList.includes(to.path) || sessionStorage.getItem('token')) {
-        
+
       document.title = to.meta.title
       next()
     } else {
@@ -32,11 +44,12 @@ router.beforeEach((to, from, next) => {
 })
 
 const onFilterRoutes = (routes) => {
-  console.log(router.options);
-  
   routes.forEach(item => {
+    console.log(item);
+
     router.options.routes.push(item)
     if (item.meta.isMenuName == '1') {
+      whileList.push(item.path)
       router.addRoute({
         path: item.path,
         name: item.name,
@@ -46,35 +59,40 @@ const onFilterRoutes = (routes) => {
         children: [],
       })
       item.children.forEach(i => {
+        whileList.push(i.path)
         router.addRoute(item.name, {
           path: i.path,
           name: i.name,
           meta: i.meta || {},
           redirect: i.redirect || "",
-          component:modules[/* @vite-ignore */i.component],
+          component: modules[/* @vite-ignore */i.component],
           // component: () => import(/*@vite ignore*/i.component),
           children: [],
         })
       })
     } else {
+      whileList.push(item.path)
       router.addRoute(item.name, {
         path: item.path,
         name: item.name,
         meta: item.meta || {},
         redirect: item.redirect || "",
-        component:modules[/* @vite-ignore */item.component],
+        component: modules[/* @vite-ignore */item.component],
         // component: () => import(/*@vite ignore*/item.component),
         children: [],
       })
     }
   })
 
+  console.log(whileList);
+
+
 }
 
 //判断是否跳转404(有问题)
 const to404 = (arr: any[]) => {
 
-  
+
   arr.forEach(item => {
     routeArr.push(item.path)
     if (item.children) {

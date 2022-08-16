@@ -71,9 +71,10 @@ const submitForm = async (formEl: FormInstance | undefined) => {
                     
                     mainStore.setRoutes(res.data.data.route)
                     // firstStore.addRoutes(res.data.data.route)
-                    router.push(router.options.routes[3].path);
+                    router.push('/');
+                    // router.push(router.options.routes[3].path);
                     sessionStorage.setItem("token",'1');
-                    // sessionStorage.setItem("route",JSON.stringify(res.data.data.route))
+                    sessionStorage.setItem("route",JSON.stringify(res.data.data.route))
                     
                 });
         } else {

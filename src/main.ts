@@ -5,14 +5,13 @@ import 'element-plus/dist/index.css'
 import './assets/css/reset.less'
 import Card from './components/card/index.vue'
 import router from './router/router_config'
-import {createPinia} from 'pinia'
+import pinia from './store/store'
 //Particles
 import Particles from 'particles.vue3'
 
 
 
 
-const store = createPinia()
 
 
-createApp(App).component('Card',Card).use(store).use(Particles).use(router).use(ElementPlus).mount('#app')
+createApp(App).component('Card',Card).use(pinia).use(Particles).use(router).use(ElementPlus).mount('#app')
