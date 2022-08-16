@@ -6,45 +6,42 @@ import pinia from '../store/store'
 import { usePermissonStore } from '../store/permission'
 
 const store = usePermissonStore(pinia)
-const { asyncRoutes } = store
 
 const modules = import.meta.glob("../views/**/**.vue")
 let whileList = ['/login', '/404']
 let routeArr = []
 //页面刷新路由失效（未解决）
-//跳转404（未解决）
+//跳转404
 router.beforeEach((to, from, next) => {
-  console.log(whileList);
-
   NProgress.start()
   routeArr = []
   to404(router.options.routes)
-  if (from.path == '/login') {
-    whileList = ['/login', '/404', '/']
+  if (router.options.routes.length == 3) {
+    if (from.path == '/login') {
+      whileList = ['/login', '/404', '/']
+    }
     let asyncRoutes = JSON.parse(sessionStorage.getItem('route'))
     if (asyncRoutes) {
       onFilterRoutes(asyncRoutes)
     }
-  }
-  if (!routeArr.includes(to.path)) {
-    next('/404')
+    next(to.path)
   } else {
-    if (whileList.includes(to.path) || sessionStorage.getItem('token')) {
-
-      document.title = to.meta.title
-      next()
+    if (!routeArr.includes(to.path)) {
+      next('/404')
     } else {
-      next('/login')
+      if (whileList.includes(to.path) || sessionStorage.getItem('token')) {
+
+        document.title = to.meta.title
+        next()
+      } else {
+        next('/login')
+      }
     }
   }
-
-
 })
 
 const onFilterRoutes = (routes) => {
   routes.forEach(item => {
-    console.log(item);
-
     router.options.routes.push(item)
     if (item.meta.isMenuName == '1') {
       whileList.push(item.path)
@@ -81,10 +78,7 @@ const onFilterRoutes = (routes) => {
       })
     }
   })
-
-  console.log(whileList);
-
-
+  store.setRoutes(routes)
 }
 
 //判断是否跳转404(有问题)
