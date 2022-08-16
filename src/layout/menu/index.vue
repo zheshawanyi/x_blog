@@ -34,6 +34,7 @@
 
 <script setup lang="ts">
 import { reactive, ref,Ref, toRaw, onMounted } from "vue";
+import { usePermissonStore } from '../../store/permission'
 import { useRouter } from "vue-router";
 import {
     Document,
@@ -42,9 +43,9 @@ import {
     Setting,
 } from "@element-plus/icons-vue";
 
-
+const store = usePermissonStore()
 const router = useRouter();
-let routeList:any = JSON.parse(sessionStorage.getItem('route'))
+let routeList:any = store.asyncRoutes
 
 
 let isCollapse: Ref<boolean> = ref(false);

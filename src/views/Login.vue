@@ -40,8 +40,10 @@ import particles from '@/components/particles/index.vue'
 //路由实例
 const router = useRouter();
 
-// const {proxy} = getCurrentInstance()
-// console.log(proxy.$root.$route);
+const mainStore = usePermissonStore()
+// const { setRoutes } = mainStore
+// console.log(setRoutes)
+
 
 const labelPosition = ref("left");
 const ruleFormRef = ref<FormInstance>();
@@ -64,12 +66,15 @@ const submitForm = async (formEl: FormInstance | undefined) => {
                     "https://www.fastmock.site/mock/018a7d4eac618f3482b07584290c6773/x_blog/login"
                 )
                 .then((res) => {
-                    console.log(import.meta.env.VITE_APP_XBLOG_SERVICE_URL);
+                    // console.log(import.meta.env.VITE_APP_XBLOG_SERVICE_URL);
+                    console.log(router);
                     
+                    mainStore.setRoutes(res.data.data.route)
                     // firstStore.addRoutes(res.data.data.route)
-                    router.push('/');
+                    router.push(router.options.routes[3].path);
                     sessionStorage.setItem("token",'1');
-                    sessionStorage.setItem("route",JSON.stringify(res.data.data.route))
+                    // sessionStorage.setItem("route",JSON.stringify(res.data.data.route))
+                    
                 });
         } else {
             ElMessage({

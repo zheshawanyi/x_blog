@@ -1,11 +1,11 @@
-import { defineAsyncComponent } from 'vue'
-import { RouteRecordRaw } from 'vue-router'
 import router from './index'
 import Layout from '../layout/index.vue'
 import NProgress from 'nprogress'
 import 'nprogress/nprogress.css'
+import {useTestStore} from '../store/index'
 
-
+// const store = useTestStore()
+// const {asyncRoutes} = store
 
 const modules = import.meta.glob("../views/**/**.vue")
 const whileList = ['/login', '/404']
@@ -20,11 +20,7 @@ router.beforeEach((to, from, next) => {
     next('/404')
   } else {
     if (whileList.includes(to.path) || sessionStorage.getItem('token')) {
-      
-      let asyncRoutes = JSON.parse(sessionStorage.getItem("route"))
-      if(asyncRoutes){
-        onFilterRoutes(asyncRoutes)
-      }   
+        
       document.title = to.meta.title
       next()
     } else {
@@ -36,7 +32,8 @@ router.beforeEach((to, from, next) => {
 })
 
 const onFilterRoutes = (routes) => {
-  let arr = []
+  console.log(router.options);
+  
   routes.forEach(item => {
     router.options.routes.push(item)
     if (item.meta.isMenuName == '1') {
@@ -45,7 +42,6 @@ const onFilterRoutes = (routes) => {
         name: item.name,
         meta: item.meta || {},
         redirect: item.redirect || "",
-        // component:modules[/* @vite-ignore */'../layout/index.vue'],
         component: () => import(/*@vite ignore*/'../layout/index.vue'),
         children: [],
       })
@@ -77,7 +73,7 @@ const onFilterRoutes = (routes) => {
 
 //判断是否跳转404(有问题)
 const to404 = (arr: any[]) => {
-  console.log(arr);
+
   
   arr.forEach(item => {
     routeArr.push(item.path)
