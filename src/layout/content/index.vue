@@ -16,6 +16,7 @@
   flex: 1;
   margin: 20px;
   overflow: auto;
+  height: 100%;
   &-item{
     padding: 10px;
   }

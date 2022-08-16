@@ -6,7 +6,7 @@ import pinia from '../store/store'
 import { usePermissonStore } from '../store/permission'
 
 const store = usePermissonStore(pinia)
-const {asyncRoutes} = store
+const { asyncRoutes } = store
 
 const modules = import.meta.glob("../views/**/**.vue")
 let whileList = ['/login', '/404']
@@ -27,8 +27,6 @@ router.beforeEach((to, from, next) => {
     }
   }
   if (!routeArr.includes(to.path)) {
-    console.log('找不到咯');
-
     next('/404')
   } else {
     if (whileList.includes(to.path) || sessionStorage.getItem('token')) {

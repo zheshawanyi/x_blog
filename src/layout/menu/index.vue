@@ -75,5 +75,9 @@ const emit = defineEmits(["on-click"]);
 <style lang="less" scoped>
 .menu {
     width: 200px;
+    height: 100%;
+}
+.el-menu-vertical-demo{
+    height: 100%;
 }
 </style>

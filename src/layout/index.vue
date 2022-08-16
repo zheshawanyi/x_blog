@@ -1,12 +1,16 @@
 <template>
     <div class="common-layout">
         <el-container>
-            <el-header><Header></Header></el-header>
+            <el-header>
+                <Header></Header>
+            </el-header>
             <el-container>
-                <el-aside width="200px"
-                    ><Menu :data="list" @on-click="getList" title="测批"></Menu
-                ></el-aside>
-                <el-main><Content> </Content></el-main>
+                <el-aside width="200px">
+                    <Menu :data="list" @on-click="getList" title="测批"></Menu>
+                </el-aside>
+                <el-main>
+                    <Content> </Content>
+                </el-main>
             </el-container>
         </el-container>
     </div>
@@ -27,6 +31,7 @@ const getList = (list: number[]) => {
 <style lang="less" scoped>
 .common-layout {
     height: 100%;
+
     :deep(.el-container) {
         height: 100%;
     }
