@@ -31,7 +31,6 @@ export default {
   height: 100%;
   top: 0;
   left: 0;
-  z-index: -1;
 }
 #particles-js {
   background-color: #2d3a4b;

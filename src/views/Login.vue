@@ -87,12 +87,14 @@ const submitForm = async (formEl: FormInstance | undefined) => {
     // align-items: center;
 }
 .title{
-    height: 300px;
     text-align: center;
     line-height: 300px;
     font-size: 80px;
-    transform: rotate(10deg);
+    display: inline-block;
     color: red;
+    position: relative;
+    left: 45%;
+    transform: rotate(10deg);
 }
 
 :deep(.el-form-item__label) {
