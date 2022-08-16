@@ -11,5 +11,14 @@ export default defineConfig({
       '@': fileURLToPath(new URL('./src', import.meta.url)),
       
     }
+  },
+  server:{
+    proxy:{
+      '/api':{
+        target:'https://www.fastmock.site/mock/018a7d4eac618f3482b07584290c6773/x_blog',
+        changeOrigin:true,
+        rewrite:(path)=>path.replace(/^\/api/,"")
+      }
+    }
   }
 })

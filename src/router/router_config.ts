@@ -30,7 +30,6 @@ router.beforeEach((to, from, next) => {
       next('/404')
     } else {
       if (whileList.includes(to.path) || sessionStorage.getItem('token')) {
-
         document.title = to.meta.title
         next()
       } else {

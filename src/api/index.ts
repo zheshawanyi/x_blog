@@ -1,23 +1,27 @@
-import axios, {AxiosInstance, AxiosRequestConfig, AxiosResponse} from 'axios';
+import axios, { AxiosInstance, AxiosRequestConfig, AxiosResponse } from 'axios';
 import qs from 'qs'
 import { showMessage } from "./status";
 import { ElMessage } from 'element-plus'
 import { IResponse, ILogin } from './type';
+import { rejects } from 'assert';
 
-let axiosInstance:AxiosInstance = axios.create({
-  baseURL: process.env.VUE_APP_BASE_URL + "/x_blog/",
-  headers: {
-    Accept: "application/json",
-    "Content-Type": "application/x-www-form-urlencoded"
-  },
-  transformRequest: [
-    function(data) {
-      //由于使用的 form-data传数据所以要格式化
-      delete data.Authorization;
-      data = qs.stringify(data);
-      return data;
-    }
-  ]
+let axiosInstance: AxiosInstance = axios.create({
+  // baseURL: process.env.VUE_APP_BASE_URL + "/x_blog/",
+  baseURL: "/api",
+
+  // headers: {
+  //   Accept: "application/json",
+  //   "Content-Type": "application/x-www-form-urlencoded"
+  // },
+  // transformRequest: [
+  //   function (data) {
+  //     //由于使用的 form-data传数据所以要格式化
+  //     delete data.Authorization;
+  //     data = qs.stringify(data);
+  //     return data;
+  //   }
+  // ]
+  timeout:6000,
 });
 
 // axios实例拦截响应
@@ -34,13 +38,13 @@ axiosInstance.interceptors.response.use(
     if (response.status === 200) {
       return response;
     } else {
-      showMessage(response.status);
+      ElMessage.warning(showMessage(response.status));
       return response;
     }
   },
   // 请求失败
   (error: any) => {
-    const {response} = error;
+    const { response } = error;
     if (response) {
       // 请求已发出，但是不在2xx的范围
       showMessage(response.status);
@@ -60,16 +64,35 @@ axiosInstance.interceptors.request.use(
     // }
     return config;
   },
-  (error:any) => {
+  (error: any) => {
     return Promise.reject(error);
   }
-) 
+)
 
 /**
  * @description: 用户登录
  * @params {ILogin} params
  * @return {Promise}
  */
-export const login = (params: ILogin): Promise<IResponse> => {
-  return axiosInstance.post('user/login',params).then(res => res.data);
+// export const login = (params: any): Promise<AxiosResponse> => {
+//   console.log(params);
+
+//   return new Promise((resolve,reject)=>{
+//     resolve(axiosInstance.get("/login", params))
+//   })
+// };
+// 使用promise返回axios请求的结果
+export function get(url, params:ILogin):Promise<AxiosResponse> {
+  return new Promise((resolve, reject) => {
+    axiosInstance.get(url, {
+      params: params,
+    }).then(res => {
+      if(res){
+        resolve(res.data)
+      }
+      
+    }).catch(err => {
+      reject(err)
+    })
+  })
 };

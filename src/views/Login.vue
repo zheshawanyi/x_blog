@@ -4,24 +4,16 @@
 
 
     <div class="login">
-        <el-form
-            ref="ruleFormRef"
-            :model="ruleForm"
-            :rules="rules"
-            :label-position="labelPosition"
-            label-width="100px"
-            style="max-width: 460px"
-        >
+        <el-form ref="ruleFormRef" :model="ruleForm" :rules="rules" :label-position="labelPosition" label-width="100px"
+            style="max-width: 460px">
             <el-form-item label="用户名">
-                <el-input v-model="ruleForm.name" placeholder="请输入用户名" />
+                <el-input v-model="ruleForm.username" placeholder="请输入用户名" />
             </el-form-item>
             <el-form-item label="密码" prop="password">
                 <el-input type="password" v-model="ruleForm.password" />
             </el-form-item>
             <el-form-item>
-                <el-button type="primary" @click="submitForm(ruleFormRef)"
-                    >登录</el-button
-                >
+                <el-button type="primary" @click="submitForm(ruleFormRef)">登录</el-button>
             </el-form-item>
         </el-form>
     </div>
@@ -35,6 +27,7 @@ import { useRouter } from "vue-router";
 import axios from "axios";
 import { usePermissonStore } from '../store/permission'
 import particles from '@/components/particles/index.vue'
+import { get } from '../api/index'
 
 
 //路由实例
@@ -52,30 +45,28 @@ const rules = reactive<FormRules>({
 });
 
 const ruleForm = reactive({
-    name: "",
+    username: "",
     password: "",
 });
+
+
 
 //登录
 const submitForm = async (formEl: FormInstance | undefined) => {
     if (!formEl) return;
+
     await formEl.validate((valid, fields) => {
         if (valid) {
-            axios
-                .get(
-                    "https://www.fastmock.site/mock/018a7d4eac618f3482b07584290c6773/x_blog/login"
-                )
+            get('/login', {
+                username: ruleForm.username,
+                password: ruleForm.password
+            })
                 .then((res) => {
-                    // console.log(import.meta.env.VITE_APP_XBLOG_SERVICE_URL);
-                    console.log(router);
-                    
-                    mainStore.setRoutes(res.data.data.route)
-                    // firstStore.addRoutes(res.data.data.route)
-                    // router.push('/');
+                    mainStore.setRoutes(res.data.route)
                     router.push(router.options.routes[3].path);
-                    sessionStorage.setItem("token",'1');
-                    sessionStorage.setItem("route",JSON.stringify(res.data.data.route))
-                    
+                    sessionStorage.setItem("token", '1');
+                    sessionStorage.setItem("route", JSON.stringify(res.data.route))
+
                 });
         } else {
             ElMessage({
@@ -94,7 +85,8 @@ const submitForm = async (formEl: FormInstance | undefined) => {
     justify-content: center;
     align-items: center;
 }
-:deep(.el-form-item__label){
+
+:deep(.el-form-item__label) {
     z-index: 1000;
 }
 </style>
