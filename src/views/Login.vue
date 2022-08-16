@@ -2,8 +2,9 @@
     <particles></particles>
     <!--引入粒子特效-->
 
-
+    <div class="title">x_blog</div>
     <div class="login">
+
         <el-form ref="ruleFormRef" :model="ruleForm" :rules="rules" :label-position="labelPosition" label-width="100px"
             style="max-width: 460px">
             <el-form-item label="用户名">
@@ -83,10 +84,20 @@ const submitForm = async (formEl: FormInstance | undefined) => {
     height: 100%;
     display: flex;
     justify-content: center;
-    align-items: center;
+    // align-items: center;
+}
+.title{
+    height: 300px;
+    text-align: center;
+    line-height: 300px;
+    font-size: 80px;
+    transform: rotate(10deg);
+    color: red;
 }
 
 :deep(.el-form-item__label) {
     z-index: 1000;
 }
+
+
 </style>

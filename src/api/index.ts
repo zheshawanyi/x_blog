@@ -82,7 +82,7 @@ axiosInstance.interceptors.request.use(
 //   })
 // };
 // 使用promise返回axios请求的结果
-export function get(url, params:ILogin):Promise<AxiosResponse> {
+export function get(url, params:any):Promise<AxiosResponse> {
   return new Promise((resolve, reject) => {
     axiosInstance.get(url, {
       params: params,
@@ -96,3 +96,14 @@ export function get(url, params:ILogin):Promise<AxiosResponse> {
     })
   })
 };
+
+
+export function post(url, data:any):Promise<AxiosResponse> {
+  return new Promise((resolve, reject) => {
+    axiosInstance.post(url, data).then(res => {
+          resolve(res.data)
+      }).catch(err => {
+          reject(err.data)
+      })
+  })
+}
